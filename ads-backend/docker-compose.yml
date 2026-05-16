@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Rust Backend API
+  backend:
+    build: .
+    container_name: ads-backend-api
+    ports:
+      - "0.0.0.0:4030:4030"
+    environment:
+      - DATABASE_URL=postgres://user:password@postgres:5432/ads_db
+      - MQTT_HOST=emqx
+      - MQTT_PORT=1883
+      - API_KEY=${API_KEY:-ADS_HACKATHON_2026}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+    depends_on:
+      - postgres
+      - emqx
+    restart: unless-stopped
+
+  # PostgreSQL with PostGIS
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: ads-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ads_db
+    ports:
+      - "0.0.0.0:4031:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+  # TimescaleDB for telemetry data
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: ads-timescaledb
+    environment:
+      POSTGRES_USER: ts_user
+      POSTGRES_PASSWORD: ts_password
+      POSTGRES_DB: telemetry_db
+    ports:
+      - "0.0.0.0:4032:5432"
+    volumes:
+      - ts_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # EMQX MQTT Broker
+  emqx:
+    image: emqx:5.3
+    container_name: ads-emqx
+    ports:
+      - "0.0.0.0:4033:1883"   # MQTT TCP
+      - "0.0.0.0:4034:18083"  # EMQX Dashboard
+      - "0.0.0.0:4035:8083"   # MQTT over WebSocket
+      - "0.0.0.0:4036:8084"   # MQTT over WebSocket (Secure)
+      - "0.0.0.0:4037:8883"   # MQTT TCP (Secure)
+    volumes:
+      - emqx_data:/opt/emqx/data
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+  ts_data:
+  emqx_data:
