@@ -1,0 +1,10 @@
+**/.git
+**/.env
+**/node_modules
+**/target
+**/build
+**/.next
+**/dist
+.idea/
+.vscode/
+*.tsbuildinfo

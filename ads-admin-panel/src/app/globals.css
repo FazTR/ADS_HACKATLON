@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-sidebar: var(--sidebar-bg);
+  --color-card: var(--card-bg);
+  --color-border: var(--border-color);
+  --color-hover: var(--hover-bg);
+
+  --color-apple-gray: #1c1c1e;
+  --color-apple-gray-light: #2c2c2e;
+  --color-apple-blue: #0a84ff;
+  --color-apple-red: #ff453a;
+  --color-apple-orange: #ff9f0a;
+  --color-apple-green: #32d74b;
+  --color-apple-yellow: #ffd60a;
+  --color-accent-neon: #ccff00;
+  --font-sans: var(--font-roboto-condensed);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  /* Light Mode - Soft & Eye-Friendly */
+  --background: #f4f5f7;
+  --foreground: #1c1c1e;
+  --sidebar-bg: #f4f5f7;
+  --card-bg: #ffffff;
+  --border-color: #e5e5ea;
+  --hover-bg: #ebebf0;
+}
+
+.dark {
+  /* Dark Mode - Pure Flat Bento Box */
+  --background: #000000;
+  --foreground: #ffffff;
+  --sidebar-bg: #09090b;
+  /* zinc-950 */
+  --card-bg: #09090b;
+  /* zinc-950 */
+  --border-color: #27272a;
+  /* zinc-800 */
+  --hover-bg: #18181b;
+  /* zinc-900 */
+}
+
+html {
+  background: #f4f5f7;
+  /* light mode default — JS yüklenmeden önce siyah göstermeyi önler */
+}
+
+html.dark {
+  background: #09090b;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark body {
+  background: var(--background);
+}
+
+/* Custom scrollbar for apple style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Yüksek Kontrast Modu */
+html.high-contrast {
+  --border-color: rgba(0, 0, 0, 0.3) !important;
+  --hover-bg: rgba(0, 0, 0, 0.1) !important;
+}
+
+html.dark.high-contrast {
+  --border-color: rgba(255, 255, 255, 0.4) !important;
+  --hover-bg: rgba(255, 255, 255, 0.15) !important;
+}
+
+.high-contrast .border-border {
+  border-width: 2px !important;
+}
+
+.high-contrast p,
+.high-contrast span {
+  font-weight: 600;
+}

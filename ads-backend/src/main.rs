@@ -194,7 +194,7 @@ mod tests {
                     .uri("/api/v1/mobile/register")
                     .header(
                         "x-api-key",
-                        env::var("API_KEY").unwrap_or_else(|_| "ADS_HACKATHON_2026".to_string()),
+                        env::var("API_KEY").unwrap_or_else(|_| "".to_string()),
                     )
                     .header("content-type", "application/json")
                     .body(Body::from(payload.to_string()))
@@ -223,7 +223,7 @@ mod tests {
                     .uri("/api/v1/mobile/register")
                     .header(
                         "x-api-key",
-                        env::var("API_KEY").unwrap_or_else(|_| "ADS_HACKATHON_2026".to_string()),
+                        env::var("API_KEY").unwrap_or_else(|_| "".to_string()),
                     )
                     .header("content-type", "application/json")
                     .body(Body::from(payload.to_string()))
@@ -254,7 +254,7 @@ mod tests {
                     .uri("/api/v1/mobile/earthquake_report")
                     .header(
                         "x-api-key",
-                        env::var("API_KEY").unwrap_or_else(|_| "ADS_HACKATHON_2026".to_string()),
+                        env::var("API_KEY").unwrap_or_else(|_| "".to_string()),
                     )
                     .header("content-type", "application/json")
                     .body(Body::from(payload.to_string()))

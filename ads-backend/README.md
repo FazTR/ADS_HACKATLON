@@ -1,56 +1,33 @@
-# ADS (Acil Durum Sistemi) Backend
+# ⚙️ ADS Backend
 
-Bu proje, afetzedelerin mobil cihazları, drone'lar (İHA) ve AFAD Kriz Merkezi Dashboard'u arasında köprü kuran asenkron, yüksek performanslı **Rust tabanlı (Axum)** sunucu yazılımıdır. 
+Bu modül, AFAD Kriz Merkezi Dashboard'u ve Sahadaki Cihazlar arasındaki haberleşmeyi sağlayan asenkron, yüksek performanslı sunucu yazılımıdır. Ana projenin bir parçasıdır.
 
-## 🚀 Kurulum ve Çalıştırma
+## 🏗️ Mimari & Geliştirici Notları
 
-Projeyi ayağa kaldırmak için bilgisayarınızda **Docker**, **Docker Compose** ve **Rust (Cargo)** kurulu olmalıdır.
+*   **Dil ve Çatı:** Sunucu **Rust** dilinde yazılmış olup, web altyapısı olarak **Axum** ve asenkron işlemler için **Tokio** kullanılmıştır.
+*   **Veritabanı (PostgreSQL & TimescaleDB):** Coğrafi veriler (PostGIS) için PostgreSQL, dronelardan gelen zaman damgalı yoğun telemetri verileri içinse TimescaleDB yapılandırılmıştır.
+*   **İletişim (MQTT):** Mobil uygulamalar ve drone simülasyonları, sunucuyla MQTT (EMQX broker) üzerinden konuşur. Bu, TCP bağlantısının kopup geldiği durumlarda paket kaybını minimuma indirir.
+*   **SSE (Server-Sent Events):** Admin paneldeki web arayüzünün anında güncellenmesi için Axum üzerinden asenkron SSE yayınları yapılır.
+*   **Ortam Değişkenleri:** Bu proje tek başına bağımsız bir `.env` dosyası barındırmaz. `dotenvy` kütüphanesi yapılandırma için ağaç hiyerarşisinde yukarı çıkarak ana dizindeki (root) `.env` dosyasını otomatik olarak okur.
 
-### 1. Çevresel Değişkenlerin (.env) Ayarlanması
-Projeyi çalıştırmadan önce `ads-backend` dizininde bulunan `.env.example` dosyasının adını `.env` olarak değiştirin veya kopyalayın. İçerisindeki API anahtarlarını (özellikle güvenli bir `API_KEY` ve `LLM_API_KEY`) belirleyin.
+## 🛠️ Yerel Geliştirme (Local Development)
 
-```bash
-cp .env.example .env
-```
-
-### 2. Veritabanı ve Mesaj Aracısını Başlatma
-
-Sistem PostGIS eklentili bir **PostgreSQL**, telemetri için **TimescaleDB** ve dronelar ile haberleşmek için **EMQX (MQTT Broker)** kullanır.
-
-Backend klasörü (ads-backend) içerisinde terminal açın ve gerekli servisleri Docker üzerinden ayağa kaldırın:
+Sadece Rust API sunucusunu geliştiriyorsanız (Docker konteynerlarının ana dizin üzerinden ayaklandırıldığını varsayıyoruz):
 
 ```bash
-docker-compose up -d
-```
+# Bağımlılıkları kontrol et ve derle
+cargo build
 
-*Not: Veritabanı tabloları `init.sql` üzerinden otomatik olarak oluşturulacaktır.*
-
-### 3. Backend Sunucusunu Başlatma
-
-Rust bağımlılıklarını indirip sunucuyu çalıştırmak için:
-
-```bash
+# Sunucuyu başlat
 cargo run
 ```
 
-Sunucu başarıyla başladığında `http://127.0.0.1:4030` adresinden hizmet vermeye başlayacaktır.
-
-### 4. API Dokümantasyonu
-
-Backend uç noktaları, request/response payloadları ve SSE (Server-Sent Events) bağlantıları hakkında detaylı bilgi için projedeki **[API.md](./API.md)** dosyasını inceleyebilirsiniz.
-
-### 5. Simülasyonu Çalıştırma (Opsiyonel)
-
-Hackathon sunumu sırasında haritada canlı hareket eden droneları, deprem bildirimlerini ve afetzede verilerini simüle etmek için hazır bir script bulunmaktadır. Sunucu ayaktayken yeni bir terminal sekmesinde şunu çalıştırabilirsiniz:
-
+### Simülasyon
+Drone'ları ve rastgele deprem ihbarlarını üretmek isterseniz aynı klasörde ayrı bir uçbirim (terminal) açarak simülasyonu tetikleyebilirsiniz:
 ```bash
 cargo run --bin simulate
 ```
 
----
+API endpoint detayları ve payload formatları için bu klasörde yer alan **`API.md`** dosyasına başvurabilirsiniz.
 
-## 🛠️ Geliştirme Standartları
-
-- **Gerçekçilik:** Üretilen kodlar %100 gerçekçi, production'a hazır ve hatasız olmalıdır. "Placeholder" veya "Burada iş mantığı olacak" gibi sahte kod bloklarından kaçınılacaktır.
-- **Yorum Satırları:** "Az ve öz" kuralı geçerlidir. Kodun zaten açıkça anlattığı kısımlara yorum yazılmayacak; yalnızca mimari olarak karmaşık kısımlar (algoritmalar, gRPC/Axum entegrasyonu vb.) açıklanacaktır.
-- **Modülerlik:** Sistem, mobil (REST/WebSocket), drone (MQTT/gRPC) ve web (SSE) istemcilerine aynı anda asenkron olarak hizmet verebilecek modülerlikte tasarlanacaktır.
+Sistemin bütüncül çalışma mantığı ve Docker (docker-compose) kurulumları için lütfen projenin **[Ana Dizindeki README.md](../README.md)** dosyasına göz atın.

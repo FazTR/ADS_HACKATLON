@@ -6,7 +6,7 @@ use std::time::Duration;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenvy::dotenv().ok();
-    let api_key = std::env::var("API_KEY").unwrap_or_else(|_| "ADS_HACKATHON_2026".to_string());
+    let api_key = std::env::var("API_KEY").unwrap_or_else(|_| "".to_string());
 
     println!("=== ADS (Acil Durum Sistemi) Simulation Started ===");
 

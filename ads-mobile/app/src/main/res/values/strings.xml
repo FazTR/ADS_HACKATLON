@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Acil Durum Sistemi</string>
+    <string name="title_text">ACİL DURUM SİSTEMİ</string>
+    <string name="status_default">Hazırlanıyor</string>
+    <string name="transmission_status_default">Gönderim beklemede</string>
+    <string name="btn_wifi">WiFi Bağlantısını Yönet</string>
+    <string name="accessibility_service_description">ADS uygulamasının acil durumlarda Wi-Fi bağlantısını otomatik açabilmesi için sistem paneli üzerinde otomatik tıklama yapmasına izin verir.</string>
+</resources>
